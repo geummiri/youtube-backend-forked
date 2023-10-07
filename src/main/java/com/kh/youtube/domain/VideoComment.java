@@ -8,12 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.JoinFormula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -36,7 +40,7 @@ public class VideoComment {
     private Date commentDate;
 
     @Column(name="comment_parent")
-    private int commentParent;
+    private Integer commentParent;
 
     @Column(name="video_code")
     private int videoCode;
