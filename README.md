@@ -2,6 +2,42 @@
 
 youtube clone project
 
+## WebSecurityConfig
+
+```java
+.requestMatchers(new AntPathRequestMatcher("/api/user/**")).permitAll()
+.requestMatchers(new AntPathRequestMatcher("/api/public/**")).permitAll()
+.anyRequest().authenticated();
+```
+
+### 사용자 ID 필요할 시
+
+```java
+@AuthenticationPrincipal String id
+```
+
+
+## API
+
+- 카테고리 전체 조회 : GET / api/public/category
+- 회원 가입 : POST / api/user/signup
+    - JSON : id, password, name
+- 로그인 : POST / api/user/signin
+    - JSON : id, password
+- 채널 추가 : POST / api/channel
+    - form-data : name, desc, photo(file)
+- 영상 추가 : POST / api/video
+    - form-data : categoryCode, title, desc, image, video 
+- 영상 전체 조회 : GET / api/public/video
+- 영상 1개 조회 : GET / api/public/video/{videoCode}
+- 영상 1개에 따른 댓글 전체 조회 : GET / api/public/video/{videoCode}/comment
+- 댓글 추가 : POST / api/video/comment
+    - JSON : commentDesc, videoCode, (commentParent : 대댓글 작성시)
+- 댓글 수정 : PUT / api/video/comment
+    - JSON : commentCode, videoCode, commentDesc, (commentParent : 대댓글 수정시)
+- 댓글 삭제 : DELETE / api/video/comment/{commentCode}
+
+
 ## JPA(Java Persistence API)
 
 - 자바 언어로 DB에 명령을 내리는 도구
