@@ -42,6 +42,14 @@ public class VideoComment {
     @Column(name="comment_parent")
     private Integer commentParent;
 
+    @JsonIgnore
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="comment_parent", referencedColumnName = "comment_code", insertable = false, updatable = false)
+    private VideoComment parent;
+
+//    @OneToMany(mappedBy = "parent", fetch=FetchType.LAZY, orphanRemoval = true)
+//    private List<VideoComment> replies = new ArrayList<>();
+
     @Column(name="video_code")
     private int videoCode;
 

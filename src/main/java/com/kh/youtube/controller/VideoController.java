@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -161,13 +162,28 @@ public class VideoController {
 
     // 영상 1개에 따른 댓글 전체 조회 : GET - http://localhost:8080/api/video/1/comment
     @GetMapping("/public/video/{id}/comment")
-    public ResponseEntity<List<VideoComment>> videoCommentList(@PathVariable int id) {
-//        List<VideoComment> list = comment.findByVideoCode(id);
-//        log.info("list : " + list);
-        return ResponseEntity.status(HttpStatus.OK).body(comment.findByVideoCode(id));
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//        return ResponseEntity.status(HttpStatus.OK).body(comment.findByVideoCode(id));
+    public ResponseEntity<List<VideoCommentDTO>> videoCommentList(@PathVariable int id) {
+        List<VideoComment> topList = comment.getAllTopLevelComments(id);
+        log.info("top : " + topList);
+
+        List<VideoCommentDTO> response = new ArrayList<>();
+
+        for(VideoComment item : topList) {
+            VideoCommentDTO dto = new VideoCommentDTO();
+            dto.setVideoCode(item.getVideoCode());
+            dto.setCommentCode(item.getCommentCode());
+            dto.setCommentDesc(item.getCommentDesc());
+            dto.setMember(item.getMember());
+            List<VideoComment> result = comment.getRepliesByCommentId(item.getCommentCode(), id);
+            dto.setReplies(result);
+            response.add(dto);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
+
+
 
     // 댓글 추가 : POST - http://localhost:8080/api/video/comment
     @PostMapping("/video/comment")
